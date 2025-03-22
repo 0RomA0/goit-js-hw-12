@@ -9,7 +9,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 export function renderPhotos(images) {
     const galleryUl = document.querySelector('.gallery');
     const loadBtn = document.querySelector('.load-btn');
-    // galleryUl.innerHTML = '';
+    galleryUl.innerHTML = '';
   
     const renderImg = images.map(item => {
         return `<li class="gallery-item">
