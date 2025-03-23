@@ -1,5 +1,7 @@
 import { backendData } from "./js/pixabay-api";
 import { renderPhotos } from "./js/render-functions";
+import { clearGallery } from "./js/render-functions";
+
 
 // Описаний у документації
 import iziToast from "izitoast";
@@ -10,7 +12,6 @@ import "izitoast/dist/css/iziToast.min.css";
 const loader = document.querySelector(".loader");
 const form = document.querySelector(".form");
 const input = document.querySelector("input");
-const galleryUl = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-btn');
 
 
@@ -40,7 +41,8 @@ if (input.value.trim() === "") {
     }) ;
     } 
 
-    galleryUl.innerHTML = '';
+    
+    clearGallery();
     loader.style.display = "block"; // Показуємо лоадер
     query = input.value;
 
@@ -49,7 +51,7 @@ if (input.value.trim() === "") {
         const hitsInfo = await backendData(query, currentPage);
         totalHits = hitsInfo.totalHits;
         if (hitsInfo.hits.length === 0) {
-
+            loadBtn.style.display = "none";
                 iziToast.show({
                     message: `❌ Sorry, there are no images matching your search query. Please try again!`,
                     position: "topRight",
@@ -61,7 +63,11 @@ if (input.value.trim() === "") {
     
             if (totalHits > 15) {
                 loadBtn.style.display = "block"; // Показуємо кнопку, якщо є ще сторінки
+            } else {
+                loadBtn.style.display = "none"; // ховаємо кнопку, якщо менше 15
+                
             }
+                
             }
     } catch (error) {
          console.log("Помилка при отриманні даних:", error);
@@ -94,8 +100,10 @@ async function clickLoadMoreBtn() {
                     behavior: "smooth"
                 });
             }
-        
-    const totalLoadedImages = currentPage * 15; 
+   
+        const totalLoadedImages = currentPage * 15; 
+        // console.log(`Total hits: ${totalHits}, Total loaded images: ${totalLoadedImages}`);
+
         if (totalLoadedImages >= totalHits) {
             loadBtn.style.display = "none"; // Ховаємо кнопку, якщо всі зображення завантажені
             iziToast.show({

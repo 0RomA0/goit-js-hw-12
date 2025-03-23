@@ -6,12 +6,9 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 
-export function renderPhotos(images) {
-    const galleryUl = document.querySelector('.gallery');
-    const loadBtn = document.querySelector('.load-btn');
-    galleryUl.innerHTML = '';
-  
-    const renderImg = images.map(item => {
+function createPhoto(imag) {
+
+    return imag.map(item => {
         return `<li class="gallery-item">
     <a class="gallery-link" href=${item.largeImageURL}>
         <img class="gallery-image" src=${item.webformatURL} alt=${item.tags} />
@@ -25,11 +22,21 @@ export function renderPhotos(images) {
 </li>`
     }).join("");
     
-    galleryUl.insertAdjacentHTML("beforeend", renderImg);
+}
+
+
+
+export function renderPhotos(images) {
+    const galleryUl = document.querySelector('.gallery');
+
+     galleryUl.insertAdjacentHTML("beforeend", createPhoto(images));
 
     const lightbox = new SimpleLightbox('.gallery a');
     lightbox.refresh();
     
-    
 }
 
+
+export function clearGallery() {
+    document.querySelector('.gallery').innerHTML = "";
+}
